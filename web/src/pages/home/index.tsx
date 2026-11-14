@@ -1,5 +1,7 @@
 import { useContents, useFavorites } from "@namu-test/shared"
+import { useEffect } from "react"
 import { useSearchParams } from "react-router"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { Skeleton } from "@/components/skeleton"
@@ -29,7 +31,25 @@ export function Home() {
     category,
   })
 
-  const { data: favorites } = useFavorites()
+  const {
+    data: favorites,
+    isError: isErrorFavorites,
+    refetch: refetchFavorites,
+  } = useFavorites()
+
+  useEffect(() => {
+    if (isErrorFavorites) {
+      toast.error("Não foi possível carregar seus favoritos", {
+        id: "favorites-error",
+        action: {
+          label: "Tentar novamente",
+          onClick: () => refetchFavorites(),
+        },
+      })
+    } else {
+      toast.dismiss("favorites-error")
+    }
+  }, [isErrorFavorites, refetchFavorites])
 
   const hasActiveFilters = Boolean(search || (category && category !== "all"))
   const isEmptyContents =
