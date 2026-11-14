@@ -1,9 +1,10 @@
 import { LucideHeadphones } from "lucide-react"
+import { Link } from "react-router"
 
 export function ContentCard() {
   return (
-    <a
-      href=""
+    <Link
+      to="/content/1"
       className="rounded-xl overflow-hidden transition-all grid hover:shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
     >
       <figure className="relative">
@@ -33,6 +34,6 @@ export function ContentCard() {
         <p className="line-clamp-3">descrição</p>
         <p className="text-muted-foreground text-sm mt-2">publicado em</p>
       </div>
-    </a>
+    </Link>
   )
 }
