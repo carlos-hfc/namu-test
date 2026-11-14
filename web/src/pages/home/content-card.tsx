@@ -2,6 +2,7 @@ import {
   type Content,
   type ContentType,
   contentTypeLabel,
+  convertContentDuration,
 } from "@namu-test/shared"
 import {
   LucideFileText,
@@ -47,7 +48,7 @@ export function ContentCard({ content }: ContentCardProps) {
         />
 
         <figcaption className="absolute bottom-2 right-2 text-background bg-foreground/70 rounded-full text-xs px-2 py-1">
-          {content.durationSeconds}
+          {convertContentDuration(content.durationSeconds)}
         </figcaption>
       </figure>
 
