@@ -1,4 +1,4 @@
-import { useContents } from "@namu-test/shared"
+import { useContents, useFavorites } from "@namu-test/shared"
 import { useSearchParams } from "react-router"
 import { z } from "zod"
 
@@ -21,6 +21,8 @@ export function Home() {
     search,
     category,
   })
+
+  const { data: favorites } = useFavorites()
 
   function handlePaginate(page: number) {
     setSearchParams(prev => {
@@ -59,6 +61,7 @@ export function Home() {
             <ContentCard
               key={content.id}
               content={content}
+              isFavorite={favorites?.has(content.id)}
             />
           ))}
         </div>

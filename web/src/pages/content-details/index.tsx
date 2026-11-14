@@ -54,7 +54,11 @@ export function ContentDetails() {
 
         <button
           disabled={isPending}
-          aria-label="Favoritar"
+          aria-label={
+            content.isFavorite
+              ? "Remover conteúdos dos favoritos"
+              : "Salvar conteúdo aos favoritos"
+          }
           className={cn(
             "absolute bottom-4 right-4 size-10 rounded-full z-1 transition-colors cursor-pointer flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary/30 disabled:pointer-events-none",
             content.isFavorite
@@ -68,7 +72,7 @@ export function ContentDetails() {
               "stroke-1 size-6",
               content.isFavorite
                 ? "fill-background text-background"
-                : "text-primary fill-primary",
+                : "text-primary",
             )}
           />
         </button>

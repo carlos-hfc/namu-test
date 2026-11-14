@@ -7,6 +7,7 @@ import {
 import {
   LucideFileText,
   LucideHeadphones,
+  LucideHeart,
   type LucideIcon,
   LucidePlayCircle,
 } from "lucide-react"
@@ -16,6 +17,7 @@ import noImage from "@/assets/no-image.webp"
 
 interface ContentCardProps {
   content: Content
+  isFavorite?: boolean
 }
 
 const icon: Record<ContentType, LucideIcon> = {
@@ -24,7 +26,7 @@ const icon: Record<ContentType, LucideIcon> = {
   video: LucidePlayCircle,
 }
 
-export function ContentCard({ content }: ContentCardProps) {
+export function ContentCard({ content, isFavorite = false }: ContentCardProps) {
   const Icon = icon[content.type]
   const ariaLabel = contentTypeLabel[content.type]
 
@@ -40,6 +42,10 @@ export function ContentCard({ content }: ContentCardProps) {
         >
           <Icon className="text-background size-5" />
         </span>
+
+        {isFavorite && (
+          <LucideHeart className="absolute size-5 right-2 top-2 text-primary fill-primary" />
+        )}
 
         <img
           src={content.thumbnailUrl ?? noImage}
