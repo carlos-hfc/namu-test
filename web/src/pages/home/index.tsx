@@ -6,6 +6,8 @@ import { Skeleton } from "@/components/skeleton"
 
 import { ContentCard } from "./content-card"
 import { ContentGridSkeleton } from "./content-grid-skeleton"
+import { EmptyContent } from "./empty-content"
+import { ErrorContent } from "./error-content"
 import { FormFilter } from "./form-filter"
 import { Pagination } from "./pagination"
 
@@ -16,13 +18,22 @@ export function Home() {
   const search = searchParams.get("search")
   const category = searchParams.get("category")
 
-  const { data: contents, isLoading: isLoadingContents } = useContents({
+  const {
+    data: contents,
+    isLoading: isLoadingContents,
+    isError: isErrorContents,
+    refetch: refetchContents,
+  } = useContents({
     page,
     search,
     category,
   })
 
   const { data: favorites } = useFavorites()
+
+  const hasActiveFilters = Boolean(search || (category && category !== "all"))
+  const isEmptyContents =
+    !isLoadingContents && !isErrorContents && contents?.data.length === 0
 
   function handlePaginate(page: number) {
     setSearchParams(prev => {
@@ -50,29 +61,40 @@ export function Home() {
           {isLoadingContents ? (
             <Skeleton className="h-4 w-24" />
           ) : (
-            <p className="text-sm">{contents?.total} conteúdo(s)</p>
+            <p className="text-sm">{contents?.total ?? 0} conteúdo(s)</p>
           )}
         </div>
 
-        <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {isLoadingContents && <ContentGridSkeleton />}
+        {isErrorContents && <ErrorContent refetch={() => refetchContents()} />}
 
-          {contents?.data.map(content => (
-            <ContentCard
-              key={content.id}
-              content={content}
-              isFavorite={favorites?.has(content.id)}
-            />
-          ))}
-        </div>
-
-        {contents && (
-          <Pagination
-            page={contents.page}
-            onPageChange={handlePaginate}
-            totalPages={contents?.totalPages}
-          />
+        {isEmptyContents && (
+          <EmptyContent hasActiveFilters={hasActiveFilters} />
         )}
+
+        {!isErrorContents && !isEmptyContents && (
+          <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {isLoadingContents && <ContentGridSkeleton />}
+
+            {contents?.data.map(content => (
+              <ContentCard
+                key={content.id}
+                content={content}
+                isFavorite={favorites?.has(content.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {!isErrorContents &&
+          !isEmptyContents &&
+          contents &&
+          contents.totalPages > 1 && (
+            <Pagination
+              page={contents.page}
+              onPageChange={handlePaginate}
+              totalPages={contents?.totalPages}
+            />
+          )}
       </section>
     </div>
   )

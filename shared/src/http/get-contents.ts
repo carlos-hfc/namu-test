@@ -1,3 +1,4 @@
+import { parseApiError } from "../api-error"
 import { api } from "../lib/axios"
 import type { Content } from "../types/content"
 
@@ -20,13 +21,17 @@ export async function getContents({
   category,
   search,
 }: GetContentsRequest) {
-  const response = await api.get<GetContentsResponse>("/contents", {
-    params: {
-      page,
-      search,
-      category: category === "all" ? null : category,
-    },
-  })
+  try {
+    const response = await api.get<GetContentsResponse>("/contents", {
+      params: {
+        page,
+        search,
+        category: category === "all" ? null : category,
+      },
+    })
 
-  return response.data
+    return response.data
+  } catch (error) {
+    throw parseApiError(error, "Erro ao carregar a lista de conteúdos")
+  }
 }
