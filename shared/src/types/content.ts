@@ -9,4 +9,9 @@ export interface Content {
   thumbnailUrl: null | string
   publishedAt: string
 }
+
 export type ContentType = "article" | "audio" | "video"
+
+export interface ContentDetail extends Content {
+  isFavorite: boolean
+}

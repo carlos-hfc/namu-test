@@ -2,12 +2,14 @@ import {
   contentTypeLabel,
   convertContentDuration,
   useContent,
+  useToggleFavorite,
 } from "@namu-test/shared"
 import { LucideChevronLeft, LucideHeart } from "lucide-react"
 import { Link, useParams } from "react-router"
 import z from "zod"
 
 import noImage from "@/assets/no-image.webp"
+import { cn } from "@/utils/cn"
 
 import { ContentDetailsSkeleton } from "./content-details-skeleton"
 
@@ -19,6 +21,15 @@ export function ContentDetails() {
   const { data: content, isLoading: isLoadingContent } = useContent({
     contentId: id,
   })
+
+  const { mutate, isPending } = useToggleFavorite()
+
+  function toggleFavorite() {
+    mutate({
+      contentId: id,
+      isCurrentlyFavorited: content?.isFavorite ?? false,
+    })
+  }
 
   if (isLoadingContent) return <ContentDetailsSkeleton />
 
@@ -42,10 +53,24 @@ export function ContentDetails() {
         />
 
         <button
+          disabled={isPending}
           aria-label="Favoritar"
-          className="absolute bottom-4 right-4 size-10 rounded-full z-1 transition-colors hover:bg-primary/10 cursor-pointer flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+          className={cn(
+            "absolute bottom-4 right-4 size-10 rounded-full z-1 transition-colors cursor-pointer flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary/30 disabled:pointer-events-none",
+            content.isFavorite
+              ? "bg-primary hover:bg-primary/80"
+              : "hover:bg-primary/10",
+          )}
+          onClick={toggleFavorite}
         >
-          <LucideHeart className="text-primary stroke-1 size-6" />
+          <LucideHeart
+            className={cn(
+              "stroke-1 size-6",
+              content.isFavorite
+                ? "fill-background text-background"
+                : "text-primary fill-primary",
+            )}
+          />
         </button>
       </figure>
 
