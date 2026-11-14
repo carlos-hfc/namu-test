@@ -4,46 +4,75 @@ import {
   useContent,
   useToggleFavorite,
 } from "@namu-test/shared"
-import { LucideChevronLeft, LucideHeart } from "lucide-react"
-import { Link, useParams } from "react-router"
+import { LucideHeart } from "lucide-react"
+import { useParams } from "react-router"
+import { toast } from "sonner"
 import z from "zod"
 
 import noImage from "@/assets/no-image.webp"
 import { cn } from "@/utils/cn"
 
 import { ContentDetailsSkeleton } from "./content-details-skeleton"
+import { ContentNotFound } from "./content-not-found"
+import { ErrorContentDetails } from "./error-content-details"
+import { GoBackLink } from "./go-back-link"
 
 export function ContentDetails() {
   const { contentId } = useParams<{ contentId: string }>()
 
-  const id = z.coerce.number().parse(contentId)
+  const parsedId = z.coerce.number().safeParse(contentId)
+  const id = parsedId.success ? parsedId.data : 0
 
-  const { data: content, isLoading: isLoadingContent } = useContent({
+  const {
+    data: content,
+    isLoading: isLoadingContent,
+    isError: isErrorContent,
+    refetch: refetchContent,
+    error: errorContent,
+  } = useContent({
     contentId: id,
   })
 
   const { mutate, isPending } = useToggleFavorite()
 
   function toggleFavorite() {
-    mutate({
-      contentId: id,
-      isCurrentlyFavorited: content?.isFavorite ?? false,
-    })
+    const isCurrentlyFavorited = content?.isFavorite ?? false
+
+    mutate(
+      {
+        contentId: id,
+        isCurrentlyFavorited,
+      },
+      {
+        onError() {
+          toast.error(
+            isCurrentlyFavorited
+              ? "Não foi possível remover dos favoritos"
+              : "Não foi possível salvar nos favoritos",
+            { id: "toggle-favorite-error" },
+          )
+        },
+      },
+    )
   }
+
+  const statusCode =
+    (errorContent as any)?.response?.status ?? (errorContent as any)?.statusCode
+  const isNotFound = !parsedId.success || statusCode === 404
 
   if (isLoadingContent) return <ContentDetailsSkeleton />
 
-  if (!content) return null
+  if (isNotFound) {
+    return <ContentNotFound />
+  }
+
+  if (isErrorContent || !content) {
+    return <ErrorContentDetails refetch={() => refetchContent()} />
+  }
 
   return (
     <div className="grid gap-6">
-      <Link
-        to="/"
-        className="text-primary font-medium text-sm flex items-center gap-2"
-      >
-        <LucideChevronLeft className="size-4" />
-        Voltar aos conteúdos
-      </Link>
+      <GoBackLink />
 
       <figure className="relative max-h-120 max-lg:-mx-4">
         <img
