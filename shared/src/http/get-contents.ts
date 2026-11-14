@@ -3,6 +3,8 @@ import type { Content } from "../types/content"
 
 export interface GetContentsRequest {
   page: number
+  search?: string | null
+  category?: string | null
 }
 
 export interface GetContentsResponse {
@@ -13,10 +15,16 @@ export interface GetContentsResponse {
   totalPages: number
 }
 
-export async function getContents({ page }: GetContentsRequest) {
+export async function getContents({
+  page,
+  category,
+  search,
+}: GetContentsRequest) {
   const response = await api.get<GetContentsResponse>("/contents", {
     params: {
       page,
+      search,
+      category: category === "all" ? null : category,
     },
   })
 

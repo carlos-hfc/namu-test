@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query"
 
 import { getContents, type GetContentsRequest } from "../http/get-contents"
 
-export function useContents({ page }: GetContentsRequest) {
+export function useContents({ page, category, search }: GetContentsRequest) {
   return useQuery({
-    queryKey: ["contents", page],
-    queryFn: () => getContents({ page }),
+    queryKey: ["contents", page, category, search],
+    queryFn: () => getContents({ page, category, search }),
   })
 }
