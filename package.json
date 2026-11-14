@@ -1,0 +1,13 @@
+{
+  "name": "namu-test",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "web",
+    "shared"
+  ],
+  "devDependencies": {
+    "@carlos-hfc/eslint-plugin": "^1.1.1",
+    "eslint": "^9.39.5"
+  }
+}
