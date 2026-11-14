@@ -9,11 +9,19 @@ import { ContentGridSkeleton } from "./content-grid-skeleton"
 import { Pagination } from "./pagination"
 
 export function Home() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const page = z.coerce.number().parse(searchParams.get("page") ?? 1)
 
   const { data: contents, isLoading: isLoadingContents } = useContents({ page })
+
+  function handlePaginate(page: number) {
+    setSearchParams(prev => {
+      prev.set("page", String(page))
+
+      return prev
+    })
+  }
 
   return (
     <div className="space-y-6">
@@ -58,10 +66,10 @@ export function Home() {
         </div>
       </form>
 
-      <section className="space-y-3">
-        <div className="flex justify-between items-end border-b border-input">
+      <section className="space-y-6">
+        <div className="flex justify-between items-end border-b border-input pb-1">
           <h2 className="font-bold text-xl">Conteúdos</h2>
-          <p className="text-sm">2 conteúdos</p>
+          <p className="text-sm">{contents?.total} conteúdos</p>
         </div>
 
         <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -75,7 +83,13 @@ export function Home() {
           ))}
         </div>
 
-        <Pagination />
+        {contents && (
+          <Pagination
+            page={contents.page}
+            onPageChange={handlePaginate}
+            totalPages={contents?.totalPages}
+          />
+        )}
       </section>
     </div>
   )
