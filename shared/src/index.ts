@@ -1,3 +1,4 @@
+export * from "./api-error"
 export * from "./env"
 export * from "./hooks/use-categories"
 export * from "./hooks/use-content"

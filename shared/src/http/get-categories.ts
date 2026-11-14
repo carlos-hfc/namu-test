@@ -1,3 +1,4 @@
+import { parseApiError } from "../api-error"
 import { api } from "../lib/axios"
 import type { Category } from "../types/category"
 
@@ -6,7 +7,11 @@ export interface GetCategoriesResponse {
 }
 
 export async function getCategories() {
-  const response = await api.get<GetCategoriesResponse>("/categories")
+  try {
+    const response = await api.get<GetCategoriesResponse>("/categories")
 
-  return response.data
+    return response.data
+  } catch (error) {
+    throw parseApiError(error, "Não foi possível carregar as categorias")
+  }
 }

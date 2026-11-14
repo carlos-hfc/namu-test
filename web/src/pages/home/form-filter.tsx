@@ -15,8 +15,10 @@ import {
   SelectValue,
   SelectViewport,
 } from "radix-ui/select"
+import { useEffect } from "react"
 import { Controller } from "react-hook-form"
 import { useSearchParams } from "react-router"
+import { toast } from "sonner"
 
 import { FormFilterSkeleton } from "./form-filter-skeleton"
 
@@ -26,12 +28,32 @@ export function FormFilter() {
   const search = searchParams.get("search")
   const category = searchParams.get("category")
 
-  const { data: categories, isLoading: isLoadingCategories } = useCategories()
+  const {
+    data: categories,
+    isLoading: isLoadingCategories,
+    isError: isErrorCategories,
+    refetch: refetchCategories,
+  } = useCategories()
 
   const { control, register, handleSubmit, reset } = useContentFilterForm({
     category: category ?? "all",
     search: search ?? "",
   })
+
+  useEffect(() => {
+    if (isErrorCategories) {
+      toast.error("Não foi possível carregar as categorias", {
+        id: "categories-error",
+        duration: 10_000,
+        action: {
+          label: "Tentar novamente",
+          onClick: () => refetchCategories(),
+        },
+      })
+    } else {
+      toast.dismiss("categories-error")
+    }
+  }, [isErrorCategories, refetchCategories])
 
   function handleFilter(data: ContentFilterSchema) {
     setSearchParams(prev => {
@@ -102,7 +124,10 @@ export function FormFilter() {
             defaultValue="all"
             onValueChange={field.onChange}
           >
-            <SelectTrigger className="border rounded-full border-muted-foreground w-full lg:w-64 h-10 flex items-center justify-between px-4 outline-none transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 data-[state=open]:[&_svg]:rotate-180 text-sm">
+            <SelectTrigger
+              data-error={isErrorCategories}
+              className="border rounded-full border-muted-foreground w-full lg:w-64 h-10 flex items-center justify-between px-4 outline-none transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30 data-[state=open]:[&_svg]:rotate-180 text-sm data-[error=true]:hidden"
+            >
               <SelectValue />
 
               <SelectIcon>
