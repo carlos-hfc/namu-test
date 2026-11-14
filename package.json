@@ -6,6 +6,9 @@
     "web",
     "shared"
   ],
+  "scripts": {
+    "dev:web": "npm run dev -w web"
+  },
   "devDependencies": {
     "@carlos-hfc/eslint-plugin": "^1.1.1",
     "eslint": "^9.39.5"
