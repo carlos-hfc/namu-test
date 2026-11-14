@@ -7,7 +7,7 @@ export function AppLayout() {
     <div className="min-h-dvh bg-zinc-100 text-foreground">
       <Header />
 
-      <main className="container mx-auto px-4 lg:px-8 py-8 lg:py-12">
+      <main className="max-w-5xl mx-auto px-4 lg:px-8 py-8 lg:py-12">
         <Outlet />
       </main>
     </div>

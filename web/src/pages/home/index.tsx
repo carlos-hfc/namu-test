@@ -1,10 +1,11 @@
 import { LucideSearch } from "lucide-react"
 
 import { Badge } from "./badge"
+import { ContentCard } from "./content-card"
 
 export function Home() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="font-bold text-3xl">Conteúdos</h1>
         <p>
@@ -45,6 +46,19 @@ export function Home() {
           ))}
         </div>
       </form>
+
+      <section className="space-y-3">
+        <div className="flex justify-between items-end border-b border-input">
+          <h2 className="font-bold text-xl">Conteúdos</h2>
+          <p className="text-sm">2 conteúdos</p>
+        </div>
+
+        <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 23 }).map((_, i) => (
+            <ContentCard key={i} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
