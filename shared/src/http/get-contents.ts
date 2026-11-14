@@ -1,5 +1,5 @@
 import { api } from "../lib/axios"
-import { Content } from "../types/content"
+import type { Content } from "../types/content"
 
 export interface GetContentsRequest {
   page: number
