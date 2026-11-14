@@ -2,6 +2,7 @@ import { LucideSearch } from "lucide-react"
 
 import { Badge } from "./badge"
 import { ContentCard } from "./content-card"
+import { Pagination } from "./pagination"
 
 export function Home() {
   return (
@@ -58,6 +59,8 @@ export function Home() {
             <ContentCard key={i} />
           ))}
         </div>
+
+        <Pagination />
       </section>
     </div>
   )
