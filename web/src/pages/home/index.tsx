@@ -1,10 +1,20 @@
+import { useContents } from "@namu-test/shared"
 import { LucideSearch } from "lucide-react"
+import { useSearchParams } from "react-router"
+import { z } from "zod"
 
 import { Badge } from "./badge"
 import { ContentCard } from "./content-card"
+import { ContentGridSkeleton } from "./content-grid-skeleton"
 import { Pagination } from "./pagination"
 
 export function Home() {
+  const [searchParams] = useSearchParams()
+
+  const page = z.coerce.number().parse(searchParams.get("page") ?? 1)
+
+  const { data: contents, isLoading: isLoadingContents } = useContents({ page })
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -55,8 +65,13 @@ export function Home() {
         </div>
 
         <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 23 }).map((_, i) => (
-            <ContentCard key={i} />
+          {isLoadingContents && <ContentGridSkeleton />}
+
+          {contents?.data.map((content, i) => (
+            <ContentCard
+              key={i}
+              content={content}
+            />
           ))}
         </div>
 
