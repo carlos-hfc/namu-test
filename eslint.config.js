@@ -12,4 +12,10 @@ export default [
     ...config,
     files: ["web/**/*.{ts,tsx,js,jsx}", "mobile/**/*.{ts,tsx,js,jsx}"],
   })),
+  {
+    files: ["mobile/**/*.{ts,tsx,js,jsx}"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off"
+    }
+  }
 ]

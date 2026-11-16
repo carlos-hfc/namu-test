@@ -1,3 +1,5 @@
+import "./src/global.css"
+
 import { StatusBar, Text, useColorScheme } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
@@ -8,7 +10,7 @@ export function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <SafeAreaView>
-        <Text>TESTE</Text>
+        <Text className="text-sm">TESTE</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   )
