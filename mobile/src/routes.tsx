@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { AppLayout } from "./_layouts/app-layout"
 import { StackParamsList } from "./@types/navigation"
 import { Home } from "./screens/home"
 
@@ -10,6 +11,7 @@ export function Routes() {
     <Stack.Navigator
       initialRouteName="home"
       screenOptions={{ headerShown: false }}
+      screenLayout={AppLayout}
     >
       <Stack.Screen
         name="home"
