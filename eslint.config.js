@@ -10,6 +10,6 @@ export default [
   })),
   ...plugin.configs.react.map((config) => ({
     ...config,
-    files: ["web/**/*.{ts,tsx,js,jsx}"],
+    files: ["web/**/*.{ts,tsx,js,jsx}", "mobile/**/*.{ts,tsx,js,jsx}"],
   })),
 ]
