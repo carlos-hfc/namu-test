@@ -1,7 +1,10 @@
 import "./src/global.css"
 
-import { StatusBar, Text, useColorScheme } from "react-native"
+import { NavigationContainer } from "@react-navigation/native"
+import { StatusBar, useColorScheme } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+
+import { Routes } from "@/routes"
 
 export function App() {
   const isDarkMode = useColorScheme() === "dark"
@@ -9,8 +12,10 @@ export function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <SafeAreaView>
-        <Text className="text-sm">TESTE</Text>
+      <SafeAreaView className="flex-1">
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
       </SafeAreaView>
     </SafeAreaProvider>
   )
