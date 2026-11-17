@@ -10,7 +10,7 @@ import { Header } from "@/components/header"
 
 export function AppLayout({ children }: PropsWithChildren) {
   return (
-    <SafeAreaView className="flex-1 bg-zinc-100 text-foreground">
+    <SafeAreaView className="flex-1 bg-zinc-100">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           className="flex-1"
