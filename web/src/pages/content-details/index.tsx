@@ -1,4 +1,5 @@
 import {
+  cn,
   contentTypeLabel,
   convertContentDuration,
   useContent,
@@ -10,7 +11,6 @@ import { toast } from "sonner"
 import z from "zod"
 
 import noImage from "@/assets/no-image.webp"
-import { cn } from "@/utils/cn"
 
 import { ContentDetailsSkeleton } from "./content-details-skeleton"
 import { ContentNotFound } from "./content-not-found"

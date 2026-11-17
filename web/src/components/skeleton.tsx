@@ -1,6 +1,5 @@
+import { cn } from "@namu-test/shared"
 import type { ComponentProps } from "react"
-
-import { cn } from "@/utils/cn"
 
 type SkeletonProps = ComponentProps<"div">
 
