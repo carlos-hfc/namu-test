@@ -1,10 +1,16 @@
 import "./src/global.css"
 
+import { configureApi } from "@namu-test/shared"
 import { NavigationContainer } from "@react-navigation/native"
+import { QueryClientProvider } from "@tanstack/react-query"
 import { StatusBar, useColorScheme } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import { env } from "@/env"
+import { queryClient } from "@/lib/react-query"
 import { Routes } from "@/routes"
+
+configureApi({ baseURL: env.API_URL })
 
 export function App() {
   const isDarkMode = useColorScheme() === "dark"
@@ -12,9 +18,12 @@ export function App() {
   return (
     <SafeAreaView className="flex-1">
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <NavigationContainer>
-        <Routes />
-      </NavigationContainer>
+
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+      </QueryClientProvider>
     </SafeAreaView>
   )
 }
