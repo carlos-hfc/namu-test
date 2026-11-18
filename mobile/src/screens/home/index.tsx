@@ -1,3 +1,4 @@
+import { useFavorites } from "@namu-test/shared"
 import { LucideFilter } from "lucide-react-native"
 import { useState } from "react"
 import {
@@ -11,16 +12,29 @@ import {
 
 import { colors } from "@/colors"
 import { BottomSheet } from "@/components/bottom-sheet"
+import { Skeleton } from "@/components/skeleton"
 import { useContentsContext } from "@/contexts/contents-context"
 
 import { ContentCard } from "../../components/content-card"
+import { ErrorContent } from "./error-content"
 import { FormFilter } from "./form-filter"
 
 export function Home() {
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false)
 
-  const { contents, total, hasActiveFilters, loadMore, isLoading, refetch } =
-    useContentsContext()
+  const {
+    contents,
+    total,
+    hasActiveFilters,
+    loadMore,
+    isLoading,
+    refetch,
+    isError,
+  } = useContentsContext()
+
+  const { data: favorites } = useFavorites()
+
+  console.log(isError)
 
   return (
     <View className="px-6 pt-3 pb-6 flex-1 gap-4">
@@ -48,7 +62,11 @@ export function Home() {
           <Text className="font-bold text-lg">Conteúdos</Text>
 
           <View className="flex-row items-center gap-2">
-            <Text className="text-sm">{total} conteúdo(s)</Text>
+            {isLoading ? (
+              <Skeleton className="h-3 w-16" />
+            ) : (
+              <Text className="text-sm">{total} conteúdo(s)</Text>
+            )}
 
             <TouchableOpacity
               className="flex-row gap-1 items-center"
@@ -68,11 +86,18 @@ export function Home() {
           </View>
         </View>
 
+        {isError && <ErrorContent refetch={refetch} />}
+
         <FlatList
           showsVerticalScrollIndicator={false}
           data={contents}
           keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <ContentCard content={item} />}
+          renderItem={({ item }) => (
+            <ContentCard
+              content={item}
+              isFavorite={favorites?.has(item.id)}
+            />
+          )}
           contentContainerClassName="gap-4"
           onEndReached={loadMore}
           refreshControl={

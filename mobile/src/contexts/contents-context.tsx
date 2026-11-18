@@ -21,6 +21,7 @@ type ContentsType = {
   loadMore(): void
   isLoading: boolean
   refetch(): void
+  isError: boolean
 }
 
 const ContentsContext = createContext({} as ContentsType)
@@ -76,8 +77,8 @@ export function ContentsProvider({ children }: PropsWithChildren) {
   }, [])
 
   const loadMore = useCallback(() => {
-    if (hasNextPage) setPage(prev => prev + 1)
-  }, [hasNextPage])
+    if (hasNextPage && !isFetching) setPage(prev => prev + 1)
+  }, [hasNextPage, isFetching])
 
   const handleRefetch = useCallback(async () => {
     setContents([])
@@ -106,11 +107,13 @@ export function ContentsProvider({ children }: PropsWithChildren) {
       hasActiveFilters,
       isLoading,
       refetch: handleRefetch,
+      isError,
     }
   }, [
     applyFilters,
     clearFilters,
     contents,
+    isError,
     data?.total,
     filters,
     handleRefetch,
