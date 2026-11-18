@@ -4,12 +4,12 @@ import { useSearchParams } from "react-router"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { ErrorContent } from "@/components/error-content"
 import { Skeleton } from "@/components/skeleton"
 
 import { ContentCard } from "./content-card"
 import { ContentGridSkeleton } from "./content-grid-skeleton"
 import { EmptyContent } from "./empty-content"
-import { ErrorContent } from "./error-content"
 import { FormFilter } from "./form-filter"
 import { Pagination } from "./pagination"
 
@@ -85,7 +85,13 @@ export function Home() {
           )}
         </div>
 
-        {isErrorContents && <ErrorContent refetch={() => refetchContents()} />}
+        {isErrorContents && (
+          <ErrorContent
+            refetch={() => refetchContents()}
+            title="Não foi possível carregar os conteúdos"
+            text="Ocorreu uma falha na comunicação com o servidor. Tente novamente."
+          />
+        )}
 
         {isEmptyContents && (
           <EmptyContent hasActiveFilters={hasActiveFilters} />

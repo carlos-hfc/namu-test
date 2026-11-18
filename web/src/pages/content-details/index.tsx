@@ -2,6 +2,7 @@ import {
   cn,
   contentTypeLabel,
   convertContentDuration,
+  publishedDate,
   useContent,
   useToggleFavorite,
 } from "@namu-test/shared"
@@ -11,10 +12,11 @@ import { toast } from "sonner"
 import z from "zod"
 
 import noImage from "@/assets/no-image.webp"
+import { Button } from "@/components/button"
+import { ErrorContent } from "@/components/error-content"
 
 import { ContentDetailsSkeleton } from "./content-details-skeleton"
 import { ContentNotFound } from "./content-not-found"
-import { ErrorContentDetails } from "./error-content-details"
 import { GoBackLink } from "./go-back-link"
 
 export function ContentDetails() {
@@ -67,7 +69,17 @@ export function ContentDetails() {
   }
 
   if (isErrorContent || !content) {
-    return <ErrorContentDetails refetch={() => refetchContent()} />
+    return (
+      <div className="space-y-6">
+        <GoBackLink />
+
+        <ErrorContent
+          refetch={() => refetchContent()}
+          title="Não foi possível carregar o conteúdo"
+          text="Ocorreu uma falha ao buscar as informações. Verifique sua conexão e tente novamente."
+        />
+      </div>
+    )
   }
 
   return (
@@ -81,20 +93,16 @@ export function ContentDetails() {
           className="w-full lg:size-full lg:object-cover"
         />
 
-        <button
+        <Button
+          variant={content.isFavorite ? "primary" : "ghost"}
+          className={cn("absolute bottom-4 right-4 size-10 z-1 p-0")}
+          onClick={toggleFavorite}
           disabled={isPending}
           aria-label={
             content.isFavorite
               ? "Remover conteúdos dos favoritos"
               : "Salvar conteúdo aos favoritos"
           }
-          className={cn(
-            "absolute bottom-4 right-4 size-10 rounded-full z-1 transition-colors cursor-pointer flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary/30 disabled:pointer-events-none",
-            content.isFavorite
-              ? "bg-primary hover:bg-primary/80"
-              : "hover:bg-primary/10",
-          )}
-          onClick={toggleFavorite}
         >
           <LucideHeart
             className={cn(
@@ -104,17 +112,14 @@ export function ContentDetails() {
                 : "text-primary",
             )}
           />
-        </button>
+        </Button>
       </figure>
 
       <div className="border-b border-ring pb-6 space-y-3">
         <span className="text-primary text-sm">{content.category}</span>
         <h1 className="text-4xl font-bold">{content.title}</h1>
         <p className="text-sm text-muted-foreground">
-          Publicado em{" "}
-          {new Date(content.publishedAt).toLocaleString("pt-br", {
-            dateStyle: "medium",
-          })}
+          Publicado em {publishedDate(content.publishedAt)}
         </p>
       </div>
 

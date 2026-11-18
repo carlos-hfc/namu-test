@@ -20,6 +20,8 @@ import { Controller } from "react-hook-form"
 import { useSearchParams } from "react-router"
 import { toast } from "sonner"
 
+import { Button } from "@/components/button"
+
 import { FormFilterSkeleton } from "./form-filter-skeleton"
 
 export function FormFilter() {
@@ -166,19 +168,20 @@ export function FormFilter() {
       />
 
       <div className="flex items-center justify-center gap-2">
-        <button
+        <Button
           type="submit"
-          className="bg-primary border border-transparent outline-none rounded-full px-4 h-10 font-bold focus-visible:ring-2 focus-visible:ring-primary/30 text-sm text-background max-lg:flex-1 cursor-pointer"
+          className="max-lg:flex-1"
         >
           Filtrar
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="border border-primary outline-none rounded-full px-4 h-10 font-bold focus-visible:ring-2 focus-visible:ring-primary/30 text-sm text-primary max-lg:flex-1 cursor-pointer"
+          variant="secondary"
+          className="max-lg:flex-1"
           onClick={handleClearFilters}
         >
           Remover filtros
-        </button>
+        </Button>
       </div>
     </form>
   )
