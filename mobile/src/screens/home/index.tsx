@@ -17,7 +17,7 @@ import { Skeleton } from "@/components/skeleton"
 import { useContentsContext } from "@/contexts/contents-context"
 
 import { ContentCard } from "../../components/content-card"
-import { EmptyContent } from "./empty-content"
+import { EmptyContent } from "../../components/empty-content"
 import { FormFilter } from "./form-filter"
 
 export function Home() {
@@ -131,7 +131,16 @@ export function Home() {
                 />
               ) : null
             }
-            ListEmptyComponent={EmptyContent}
+            ListEmptyComponent={
+              <EmptyContent
+                title="Nenhum conteúdo encontrado"
+                text={
+                  hasActiveFilters
+                    ? "Não encontramos resultados para os filtros aplicados"
+                    : "Ainda não há conteúdos disponíveis no momento"
+                }
+              />
+            }
           />
         )}
       </View>

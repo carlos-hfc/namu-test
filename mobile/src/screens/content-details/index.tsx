@@ -33,17 +33,6 @@ export function ContentDetails({
 
   if (isNotFound) return <NotFound />
 
-  if (isError) {
-    return (
-      <ErrorDetails
-        refetch={refetch}
-        title="Não foi possível carregar o conteúdo"
-        text="Ocorreu uma falha ao buscar as informações. Verifique sua conexão e tente novamente."
-        className="flex-1"
-      />
-    )
-  }
-
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -55,7 +44,14 @@ export function ContentDetails({
     )
   }
 
-  if (isError || !data) return null
+  if (isError || !data)
+    return (
+      <ErrorDetails
+        refetch={refetch}
+        title="Não foi possível carregar os conteúdos"
+        text="Ocorreu uma falha na comunicação com o servidor. Tente novamente."
+      />
+    )
 
   return (
     <SafeAreaView className="px-6 pt-3 pb-6 flex-1 gap-4">
