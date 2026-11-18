@@ -1,27 +1,39 @@
+import { cn } from "@namu-test/shared"
 import { LucideAlertCircle } from "lucide-react-native"
 import { Text, View } from "react-native"
 
 import { colors } from "@/colors"
 import { Button } from "@/components/button"
 
-interface ErrorContentProps {
+interface ErrorDetailsProps {
   refetch(): void
+  className?: string
+  title: string
+  text: string
 }
 
-export function ErrorContent({ refetch }: ErrorContentProps) {
+export function ErrorDetails({
+  refetch,
+  text,
+  title,
+  className,
+}: ErrorDetailsProps) {
   return (
-    <View className="items-center justify-center rounded-xl gap-3 px-4 py-6">
+    <View
+      className={cn(
+        "items-center justify-center rounded-xl gap-3 px-4 py-6",
+        className,
+      )}
+    >
       <LucideAlertCircle
         color={colors.destructive}
         size={40}
       />
 
       <View className="gap-1">
-        <Text className="text-center text-lg font-bold">
-          Não foi possível carregar os conteúdos
-        </Text>
+        <Text className="text-center text-lg font-bold">{title}</Text>
         <Text className="text-center text-base text-muted-foreground">
-          Ocorreu uma falha na comunicação com o servidor. Tente novamente.
+          {text}
         </Text>
       </View>
 

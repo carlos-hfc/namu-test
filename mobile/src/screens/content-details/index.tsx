@@ -1,37 +1,108 @@
-import { Image, Text, View } from "react-native"
+import {
+  contentTypeLabel,
+  convertContentDuration,
+  publishedDate,
+  useContent,
+} from "@namu-test/shared"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { LucideClock, LucideGraduationCap } from "lucide-react-native"
+import { ActivityIndicator, Image, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+
+import { StackParamsList } from "@/@types/navigation"
+import { colors } from "@/colors"
+import { ErrorDetails } from "@/components/error-details"
+import { contentTypeIcon } from "@/utils/show-content-type-icon"
 
 import { Header } from "./header"
 import { InformationCard } from "./information-card"
+import { NotFound } from "./not-found"
 
-export function ContentDetails() {
+export function ContentDetails({
+  route,
+}: NativeStackScreenProps<StackParamsList, "content-details">) {
+  const { id } = route.params
+
+  const { data, isLoading, isError, refetch, error } = useContent({
+    contentId: id,
+  })
+
+  const statusCode =
+    (error as any)?.response?.status ?? (error as any)?.statusCode
+  const isNotFound = statusCode === 404
+
+  if (isNotFound) return <NotFound />
+
+  if (isError) {
+    return (
+      <ErrorDetails
+        refetch={refetch}
+        title="Não foi possível carregar o conteúdo"
+        text="Ocorreu uma falha ao buscar as informações. Verifique sua conexão e tente novamente."
+        className="flex-1"
+      />
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator
+          color={colors.primary}
+          size={"large"}
+        />
+      </View>
+    )
+  }
+
+  if (isError || !data) return null
+
   return (
     <SafeAreaView className="px-6 pt-3 pb-6 flex-1 gap-4">
-      <Header />
+      <Header
+        contentId={id}
+        isFavorite={data.isFavorite}
+      />
 
       <Image
-        source={require("@/assets/no-image.png")}
-        alt=""
+        source={
+          data.thumbnailUrl
+            ? { uri: data.thumbnailUrl }
+            : require("@/assets/no-image.png")
+        }
+        alt={data.title}
         className="w-full h-48"
       />
 
       <View className="gap-2">
-        <Text className="text-primary text-sm">categoria</Text>
-        <Text className="text-2xl font-bold">Título</Text>
-        <Text className="text-muted-foreground text-sm">publicado em</Text>
+        <Text className="text-primary text-sm">{data.category}</Text>
+        <Text className="text-2xl font-bold">{data.title}</Text>
+        <Text className="text-muted-foreground text-sm">
+          Publicado em Publicado em {publishedDate(data.publishedAt)}
+        </Text>
       </View>
 
       <Text className="text-base border-y py-4 border-border">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus
-        dolorum repellat error, distinctio aspernatur rerum dolore a molestias
-        iusto veniam natus incidunt odio rem voluptatem vel autem fugit nisi
-        iure?
+        {data.description}
       </Text>
 
       <View className="flex-row gap-2 items-center">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <InformationCard key={`info-card-${i}`} />
-        ))}
+        <InformationCard
+          title="Tipo"
+          text={contentTypeLabel[data.type]}
+          Icon={contentTypeIcon[data.type]}
+        />
+        <InformationCard
+          title="Instrutor"
+          text={data.instructor}
+          Icon={LucideGraduationCap}
+          className="basis-1/4"
+        />
+        <InformationCard
+          title="Duração"
+          text={convertContentDuration(data.durationSeconds)}
+          Icon={LucideClock}
+        />
       </View>
     </SafeAreaView>
   )

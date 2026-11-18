@@ -12,12 +12,12 @@ import {
 
 import { colors } from "@/colors"
 import { BottomSheet } from "@/components/bottom-sheet"
+import { ErrorDetails } from "@/components/error-details"
 import { Skeleton } from "@/components/skeleton"
 import { useContentsContext } from "@/contexts/contents-context"
 
 import { ContentCard } from "../../components/content-card"
 import { EmptyContent } from "./empty-content"
-import { ErrorContent } from "./error-content"
 import { FormFilter } from "./form-filter"
 
 export function Home() {
@@ -95,7 +95,13 @@ export function Home() {
           </View>
         )}
 
-        {isError && <ErrorContent refetch={refetch} />}
+        {isError && (
+          <ErrorDetails
+            refetch={refetch}
+            title="Não foi possível carregar os conteúdos"
+            text="Ocorreu uma falha na comunicação com o servidor. Tente novamente."
+          />
+        )}
 
         {!isInitialLoading && !isError && (
           <FlatList

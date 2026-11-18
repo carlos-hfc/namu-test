@@ -18,3 +18,8 @@ export function convertContentDuration(durationSeconds: number) {
   const hours = Math.floor(seconds / 3600)
   return `${hours}h`
 }
+
+export const publishedDate = (date: string) =>
+  new Date(date).toLocaleString("pt-br", {
+    dateStyle: "medium",
+  })

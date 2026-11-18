@@ -1,8 +1,8 @@
 import {
   Content,
   ContentType,
-  contentTypeLabel,
   convertContentDuration,
+  publishedDate,
 } from "@namu-test/shared"
 import { useNavigation } from "@react-navigation/native"
 import {
@@ -30,7 +30,6 @@ const icon: Record<ContentType, LucideIcon> = {
 export function ContentCard({ content, isFavorite = false }: ContentCardProps) {
   const navigation = useNavigation()
   const Icon = icon[content.type]
-  const ariaLabel = contentTypeLabel[content.type]
 
   return (
     <TouchableOpacity
@@ -48,7 +47,7 @@ export function ContentCard({ content, isFavorite = false }: ContentCardProps) {
 
         {isFavorite && (
           <LucideHeart
-            style={{ position: "absolute", right: 8, top: 8 }}
+            style={{ position: "absolute", right: 8, top: 8, zIndex: 10 }}
             color={colors.primary}
             fill={colors.primary}
             size={16}
@@ -87,10 +86,7 @@ export function ContentCard({ content, isFavorite = false }: ContentCardProps) {
           {content.description}
         </Text>
         <Text className="text-muted-foreground text-sm mt-2">
-          publicado em{" "}
-          {new Date(content.publishedAt).toLocaleString("pt-br", {
-            dateStyle: "medium",
-          })}
+          Publicado em {publishedDate(content.publishedAt)}
         </Text>
       </View>
     </TouchableOpacity>
