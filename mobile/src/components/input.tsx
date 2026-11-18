@@ -1,11 +1,13 @@
 import { cn } from "@namu-test/shared"
 import { LucideSearch } from "lucide-react-native"
 import { useState } from "react"
-import { TextInput, View } from "react-native"
+import { TextInput, TextInputProps, View } from "react-native"
 
 import { colors } from "@/colors"
 
-export function Input() {
+type InputProps = TextInputProps
+
+export function Input({ className, ...props }: InputProps) {
   const [isFocused, setIsFocused] = useState(false)
 
   return (
@@ -21,7 +23,8 @@ export function Input() {
       />
 
       <TextInput
-        className="flex-1 text-sm text-primary-foreground"
+        {...props}
+        className={cn("flex-1 text-sm text-primary-foreground", className)}
         placeholder="Busque por um título"
         placeholderTextColor={colors["muted-foreground"]}
         onFocus={() => setIsFocused(true)}

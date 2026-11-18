@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { StatusBar, useColorScheme } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import { ContentsProvider } from "@/contexts/contents-context"
 import { env } from "@/env"
 import { queryClient } from "@/lib/react-query"
 import { Routes } from "@/routes"
@@ -20,9 +21,11 @@ export function App() {
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Routes />
-        </NavigationContainer>
+        <ContentsProvider>
+          <NavigationContainer>
+            <Routes />
+          </NavigationContainer>
+        </ContentsProvider>
       </QueryClientProvider>
     </SafeAreaView>
   )

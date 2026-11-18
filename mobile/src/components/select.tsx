@@ -1,4 +1,4 @@
-import { cn } from "@namu-test/shared"
+import { Category, cn } from "@namu-test/shared"
 import { LucideCheckCircle2, LucideChevronDown } from "lucide-react-native"
 import { useRef, useState } from "react"
 import {
@@ -14,8 +14,13 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import { colors } from "@/colors"
 
+type SelectOption = Category
+
 interface SelectProps {
-  offset?: number
+  placeholder?: string
+  options: SelectOption[]
+  value?: string
+  onValueChange(value: string): void
 }
 
 interface DropdownPosition {
@@ -25,9 +30,10 @@ interface DropdownPosition {
   width: number
 }
 
+const OFFSET = 8
 const MAX_DROPDOWN_HEIGHT = 40 * 4 // max-h-40
 
-export function Select({ offset = 8 }: SelectProps) {
+export function Select({ onValueChange, options, value }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState<DropdownPosition>({
     left: 0,
@@ -35,6 +41,8 @@ export function Select({ offset = 8 }: SelectProps) {
   })
 
   const containerRef = useRef<ViewInstance>(null)
+
+  const selectOption = options.find(option => option.slug === value)
 
   const closeSelect = () => setIsOpen(false)
 
@@ -44,23 +52,28 @@ export function Select({ offset = 8 }: SelectProps) {
       const spaceBelow = screenHeight - (y + height)
 
       const opensUpwards =
-        spaceBelow < MAX_DROPDOWN_HEIGHT + offset && y > spaceBelow
+        spaceBelow < MAX_DROPDOWN_HEIGHT + OFFSET && y > spaceBelow
 
       if (opensUpwards) {
         setPosition({
-          bottom: screenHeight - y + offset,
+          bottom: screenHeight - y + OFFSET,
           left: x,
           width,
         })
       } else {
         setPosition({
-          top: y + height + offset,
+          top: y + height + OFFSET,
           left: x,
           width,
         })
       }
       setIsOpen(true)
     })
+  }
+
+  function handleSelectItem(selectedValue: string) {
+    onValueChange(selectedValue)
+    closeSelect()
   }
 
   return (
@@ -77,9 +90,12 @@ export function Select({ offset = 8 }: SelectProps) {
       >
         <Text
           numberOfLines={1}
-          className="text-sm flex-1 text-primary-foreground"
+          className={cn(
+            "text-sm flex-1 text-muted-foreground",
+            selectOption && "text-primary-foreground",
+          )}
         >
-          Todas
+          {selectOption?.name ?? "Todas"}
         </Text>
 
         <LucideChevronDown
@@ -113,30 +129,22 @@ export function Select({ offset = 8 }: SelectProps) {
             contentContainerClassName="gap-3"
             showsVerticalScrollIndicator={false}
           >
-            <Pressable className="flex-row gap-3 items-center justify-between">
-              <Text className="flex-1 text-primary-foreground text-sm font-semibold">
-                categoria
-              </Text>
-
-              <LucideCheckCircle2
-                size={16}
-                color={colors.primary}
-              />
-            </Pressable>
-
-            {Array.from({ length: 7 }).map((_, i) => (
+            {options.map(option => (
               <Pressable
-                key={`option-${i}`}
+                key={`option-${option.slug}`}
                 className="flex-row gap-3 items-center justify-between"
+                onPress={() => handleSelectItem(option.slug)}
               >
                 <Text className="flex-1 text-primary-foreground text-sm font-semibold">
-                  categoria
+                  {option.name}
                 </Text>
 
-                <LucideCheckCircle2
-                  size={16}
-                  color={colors.primary}
-                />
+                {selectOption?.slug === option.slug && (
+                  <LucideCheckCircle2
+                    size={16}
+                    color={colors.primary}
+                  />
+                )}
               </Pressable>
             ))}
           </ScrollView>
