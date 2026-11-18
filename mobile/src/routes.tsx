@@ -6,6 +6,7 @@ import { AppLayout } from "./_layouts/app-layout"
 import { BottomParamsList, StackParamsList } from "./@types/navigation"
 import { colors } from "./colors"
 import { ContentDetails } from "./screens/content-details"
+import { Favorites } from "./screens/favorites"
 import { Home } from "./screens/home"
 
 const Stack = createNativeStackNavigator<StackParamsList>()
@@ -36,7 +37,7 @@ export function TabRoutes() {
       />
       <Tab.Screen
         name="favorites"
-        component={Home}
+        component={Favorites}
         options={{
           tabBarLabel: "Favoritos",
           tabBarIcon(props) {

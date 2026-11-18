@@ -5,7 +5,7 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native"
 import { colors } from "@/colors"
 import { BottomSheet } from "@/components/bottom-sheet"
 
-import { ContentCard } from "./content-card"
+import { ContentCard } from "../../components/content-card"
 import { FormFilter } from "./form-filter"
 
 export function Home() {
