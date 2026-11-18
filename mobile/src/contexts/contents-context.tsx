@@ -19,7 +19,8 @@ type ContentsType = {
   applyFilters(data: ContentFilterSchema): void
   clearFilters(): void
   loadMore(): void
-  isLoading: boolean
+  isInitialLoading: boolean
+  isLoadingMore: boolean
   refetch(): void
   isError: boolean
 }
@@ -48,6 +49,8 @@ export function ContentsProvider({ children }: PropsWithChildren) {
   const hasActiveFilters = Boolean(
     filters.search || (filters.category && filters.category !== "all"),
   )
+  const isInitialLoading = isLoading && page === 1
+  const isLoadingMore = isLoading && page > 1
 
   useEffect(() => {
     if (!data?.data) return
@@ -105,21 +108,23 @@ export function ContentsProvider({ children }: PropsWithChildren) {
       contents,
       total: data?.total ?? 0,
       hasActiveFilters,
-      isLoading,
+      isInitialLoading,
       refetch: handleRefetch,
       isError,
+      isLoadingMore,
     }
   }, [
+    filters,
     applyFilters,
     clearFilters,
-    contents,
-    isError,
-    data?.total,
-    filters,
-    handleRefetch,
-    hasActiveFilters,
-    isLoading,
     loadMore,
+    contents,
+    data?.total,
+    hasActiveFilters,
+    isInitialLoading,
+    handleRefetch,
+    isError,
+    isLoadingMore,
   ])
 
   return (

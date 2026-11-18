@@ -27,14 +27,13 @@ export function Home() {
     total,
     hasActiveFilters,
     loadMore,
-    isLoading,
+    isInitialLoading,
     refetch,
     isError,
+    isLoadingMore,
   } = useContentsContext()
 
   const { data: favorites } = useFavorites()
-
-  console.log(isError)
 
   return (
     <View className="px-6 pt-3 pb-6 flex-1 gap-4">
@@ -62,7 +61,7 @@ export function Home() {
           <Text className="font-bold text-lg">Conteúdos</Text>
 
           <View className="flex-row items-center gap-2">
-            {isLoading ? (
+            {isInitialLoading ? (
               <Skeleton className="h-3 w-16" />
             ) : (
               <Text className="text-sm">{total} conteúdo(s)</Text>
@@ -86,35 +85,47 @@ export function Home() {
           </View>
         </View>
 
+        {isInitialLoading && (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator
+              color={colors.primary}
+              size={"large"}
+            />
+          </View>
+        )}
+
         {isError && <ErrorContent refetch={refetch} />}
 
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={contents}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <ContentCard
-              content={item}
-              isFavorite={favorites?.has(item.id)}
-            />
-          )}
-          contentContainerClassName="gap-4"
-          onEndReached={loadMore}
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={refetch}
-            />
-          }
-          ListFooterComponent={() =>
-            isLoading ? (
-              <ActivityIndicator
-                color={colors.primary}
-                size={"large"}
+        {!isInitialLoading && !isError && (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={contents}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <ContentCard
+                content={item}
+                isFavorite={favorites?.has(item.id)}
               />
-            ) : null
-          }
-        />
+            )}
+            contentContainerClassName="gap-4"
+            onEndReached={loadMore}
+            onEndReachedThreshold={0}
+            refreshControl={
+              <RefreshControl
+                refreshing={isInitialLoading}
+                onRefresh={refetch}
+              />
+            }
+            ListFooterComponent={() =>
+              isLoadingMore ? (
+                <ActivityIndicator
+                  color={colors.primary}
+                  size={"large"}
+                />
+              ) : null
+            }
+          />
+        )}
       </View>
     </View>
   )
