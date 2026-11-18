@@ -6,6 +6,9 @@ export function useFavorites() {
   return useQuery({
     queryKey: ["favorites"],
     queryFn: getFavorites,
-    select: ({ data }) => new Set(data.map(item => item.id)),
+    select: ({ data }) => ({
+      items: data,
+      ids: new Set(data.map(item => item.id)),
+    }),
   })
 }

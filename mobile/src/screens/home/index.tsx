@@ -111,7 +111,7 @@ export function Home() {
             renderItem={({ item }) => (
               <ContentCard
                 content={item}
-                isFavorite={favorites?.has(item.id)}
+                isFavorite={favorites?.ids?.has(item.id)}
               />
             )}
             contentContainerClassName="gap-4"

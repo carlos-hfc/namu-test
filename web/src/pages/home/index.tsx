@@ -99,7 +99,7 @@ export function Home() {
               <ContentCard
                 key={content.id}
                 content={content}
-                isFavorite={favorites?.has(content.id)}
+                isFavorite={favorites?.ids?.has(content.id)}
               />
             ))}
           </div>
