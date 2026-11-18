@@ -1,11 +1,18 @@
+import { useNavigation } from "@react-navigation/native"
 import { LucideFileText, LucideHeart } from "lucide-react-native"
-import { Image, Text, View } from "react-native"
+import { Image, Text, TouchableOpacity, View } from "react-native"
 
 import { colors } from "@/colors"
 
 export function ContentCard() {
+  const navigation = useNavigation()
+
   return (
-    <View className="rounded-xl bg-background shadow-sm shadow-black/30 overflow-hidden">
+    <TouchableOpacity
+      activeOpacity={0.8}
+      className="rounded-xl bg-background shadow-sm shadow-black/30 overflow-hidden"
+      onPress={() => navigation.navigate("content-details", { id: 1 })}
+    >
       <View className="relative">
         <View className="absolute bg-primary/70 rounded-br-lg p-1.5">
           <LucideFileText
@@ -48,6 +55,6 @@ export function ContentCard() {
         </Text>
         <Text className="text-muted-foreground text-sm mt-2">publicado em</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }

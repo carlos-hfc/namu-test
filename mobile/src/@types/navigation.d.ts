@@ -1,13 +1,17 @@
-export type StackParamsList = {
+type BottomParamsList = {
   home: undefined
+  favorites: undefined
+}
+
+export type StackParamsList = {
+  main: BottomParamsList
   "content-details": {
     id: number
   }
-  favorites: undefined
 }
 
 declare global {
   namespace ReactNavigation {
-    type RootParamList = StackParamsList
+    type RootParamList = StackParamsList & BottomParamsList
   }
 }
