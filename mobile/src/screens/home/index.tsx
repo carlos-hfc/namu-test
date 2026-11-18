@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/skeleton"
 import { useContentsContext } from "@/contexts/contents-context"
 
 import { ContentCard } from "../../components/content-card"
+import { EmptyContent } from "./empty-content"
 import { ErrorContent } from "./error-content"
 import { FormFilter } from "./form-filter"
 
@@ -124,6 +125,7 @@ export function Home() {
                 />
               ) : null
             }
+            ListEmptyComponent={EmptyContent}
           />
         )}
       </View>

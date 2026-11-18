@@ -23,6 +23,7 @@ type ContentsType = {
   isLoadingMore: boolean
   refetch(): void
   isError: boolean
+  isEmpty: boolean
 }
 
 const ContentsContext = createContext({} as ContentsType)
@@ -51,6 +52,7 @@ export function ContentsProvider({ children }: PropsWithChildren) {
   )
   const isInitialLoading = isLoading && page === 1
   const isLoadingMore = isLoading && page > 1
+  const isEmpty = !isLoading && !isError && contents.length === 0
 
   useEffect(() => {
     if (!data?.data) return
@@ -112,8 +114,10 @@ export function ContentsProvider({ children }: PropsWithChildren) {
       refetch: handleRefetch,
       isError,
       isLoadingMore,
+      isEmpty,
     }
   }, [
+    isEmpty,
     filters,
     applyFilters,
     clearFilters,

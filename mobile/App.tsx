@@ -1,6 +1,6 @@
 import "./src/global.css"
 
-import { configureApi } from "@namu-test/shared"
+import { api, configureApi } from "@namu-test/shared"
 import { NavigationContainer } from "@react-navigation/native"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { StatusBar, useColorScheme } from "react-native"
@@ -12,6 +12,15 @@ import { queryClient } from "@/lib/react-query"
 import { Routes } from "@/routes"
 
 configureApi({ baseURL: env.API_URL })
+
+api.interceptors.request.use(config => {
+  new Promise(resolve => setTimeout(() => resolve({}), 5000))
+  // if (config.url?.includes("/contents")) {
+  //   return Promise.reject(new ApiError("Erro"))
+  // }
+
+  return config
+})
 
 export function App() {
   const isDarkMode = useColorScheme() === "dark"
