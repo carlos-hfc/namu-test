@@ -1,75 +1,92 @@
-# React + TypeScript + Vite
+# Aplicação Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web da biblioteca Namu, construída com React, Vite e TypeScript.
 
-Currently, two official plugins are available:
+## Ambiente publicado
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+A aplicação também está disponível em:
 
-## React Compiler
+https://namu-test-carlos-hfc.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Para realizar consultas à API, ela precisa estar rodando na máquina local. Ao abrir a aplicação publicada no navegador, será solicitada permissão para acessar outros aplicativos e serviços no dispositivo.
 
-## Expanding the ESLint configuration
+Safari bloqueia essa solicitação por padrão. Nesse caso, use um navegador que permita o acesso à API local ou configure o Safari para permitir os requisitos necessários.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Funcionalidades
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Catálogo paginado com título, categoria, tipo, duração e imagem.
+- Busca por título e filtro por categoria.
+- Estados de carregamento, vazio, erro e tentativa novamente.
+- Página de detalhes em `/content/:contentId`.
+- Favoritar e desfavoritar conteúdos.
+- Layout responsivo e elementos acessíveis.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tecnologias
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React 19 e React DOM.
+- Vite 8.
+- React Router para navegação.
+- TanStack React Query para dados remotos.
+- React Hook Form, Zod e Radix UI.
+- Tailwind CSS.
+- Vitest, Testing Library e MSW.
 
+## Pré-requisitos
+
+- Node.js 22.11 ou superior.
+- API REST acessível.
+
+## Configuração
+
+Na raiz do monorepo:
+
+```sh
+npm ci
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Configure `web/.env`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```dotenv
+VITE_API_URL=http://localhost:3333
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+O valor pode apontar para outra instância da API. Reinicie o servidor Vite depois de alterar o arquivo.
 
+## Execução
+
+```sh
+npm run dev -w web
+```
+
+URL padrão: `http://localhost:5173`.
+
+## Build
+
+```sh
+npm run build -w web
+npm run preview -w web
+```
+
+O build gera os arquivos em `web/dist`.
+
+## Testes
+
+```sh
+npm run test -w web
+```
+
+Os testes estão em `src/**/*.spec.tsx`. O servidor MSW definido em `src/test/mocks` simula categorias, conteúdos e favoritos. Os testes cobrem listagem, filtros, estados de erro, navegação e detalhes.
+
+## Lint
+
+Na raiz do monorepo:
+
+```sh
+npm run lint
+```
+
+Ou apenas neste workspace:
+
+```sh
+npm run lint -w web
 ```
