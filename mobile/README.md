@@ -2,6 +2,12 @@
 
 Aplicativo React Native em bare workflow para consultar conteúdos e gerenciar favoritos da biblioteca Namu.
 
+## Demonstração
+
+Um vídeo curto mostrando o funcionamento do aplicativo está disponível em:
+
+https://youtube.com/shorts/-b5MRk-Dw80
+
 ## Funcionalidades
 
 - Tela de conteúdos com lista paginada.
